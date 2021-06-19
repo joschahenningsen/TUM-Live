@@ -20,6 +20,24 @@ func configGinStreamRestRouter(router *gin.Engine) {
 	g.Use(tools.InitStream)
 	g.Use(tools.AdminOfCourse)
 	g.GET("/api/stream/:streamID", getStream)
+	g.POST("/api/stream/chatMode/:streamID", setStreamChatMode)
+}
+
+func setStreamChatMode(c *gin.Context) {
+	var req chatMode
+	if err := c.BindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	err := dao.SetChatMode(c.Param("streamID"), req.Moderated)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+}
+
+type chatMode struct {
+	Moderated bool `json:"moderated"`
 }
 
 func getStream(c *gin.Context) {

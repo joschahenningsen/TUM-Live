@@ -116,7 +116,13 @@
     </div>
     {{if $course.ChatEnabled}}
         <div id="chatWrapper"
-             class="hidden md:flex flex-col w-full md:h-full border-t-2 mt-2 md:mt-0 md:border-t-0 md:border-l border-secondary bg-secondary-lighter md:w-2/6 lg:w-1/6 text-white pt-3">
+             class="hidden md:flex flex-col w-full md:h-full border-t-2 mt-2 md:mt-0 md:border-t-0 md:border-l border-secondary bg-secondary-lighter md:w-2/6 lg:w-1/6 text-white">
+            {{if .IsAdminOfCourse}}
+            <div class="p-2 border-b-2 border-secondary">
+                <label for="toggle"
+                       class="cursor-pointer">Moderated</label>
+                <input type="checkbox" {{if $stream.Moderated}}checked {{end}}id="toggle" class="cursor-pointer w-auto" onchange="moderatedChange(this)">
+            </div>{{end}}
             <div id="chatBox" class="overflow-scroll overflow-x-hidden overflow-y-scroll" style="flex: 2;">
                 {{range $chat := $stream.Chats}}
                     <div class="rounded p-2 mx-2">

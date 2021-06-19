@@ -6,3 +6,13 @@ function usePreset(cID: number, lectureHallID: number, presetID: number, streamI
         }
     )
 }
+
+function moderatedChange(evt: HTMLInputElement) {
+    postData("/api/stream/chatMode/" + (document.getElementById("streamID") as HTMLInputElement).value,
+        {"moderated": evt.checked}
+    ).then(r => {
+        if (r.status !== 200) {
+            console.log(r.status)
+        }
+    });
+}

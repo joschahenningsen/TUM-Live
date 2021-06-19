@@ -27,6 +27,12 @@ func GetStreamByKey(ctx context.Context, key string) (stream model.Stream, err e
 	return res, nil
 }
 
+func SetChatMode(streamID string, moderated bool) error {
+	Cache.Del(fmt.Sprintf("streambyid%v", streamID))
+	err := DB.Model(&model.Stream{}).Where("id = ?", streamID).Update("moderated", moderated).Error
+	return err
+}
+
 func DeleteUnit(id uint) {
 	defer Cache.Clear()
 	DB.Delete(&model.StreamUnit{}, id)
@@ -102,6 +108,7 @@ func UpdateStream(stream model.Stream) error {
 }
 
 func SetStreamLive(ctx context.Context, streamKey string, playlistUrl string) (err error) {
+	Cache.Clear()
 	dbErr := DB.Model(&model.Stream{}).
 		Where("stream_key = ?", streamKey).
 		Update("live_now", true).

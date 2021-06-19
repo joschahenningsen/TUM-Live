@@ -35,6 +35,7 @@ type Stream struct {
 	EndOffset        uint `gorm:"default:null"`
 	LectureHallID    uint `gorm:"default:null"`
 	Silences         []Silence
+	Moderated        bool `gorm:"default:true"`
 }
 
 func (s Stream) IsPast() bool {

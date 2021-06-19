@@ -58,7 +58,7 @@ func configGinChatRouter(router *gin.RouterGroup) {
 			return
 		}
 		tumLiveContext := foundContext.(tools.TUMLiveContext)
-		var chat ChatReq
+		var chat chatReq
 		if err := json.Unmarshal(msg, &chat); err != nil {
 			return
 		}
@@ -95,7 +95,9 @@ func configGinChatRouter(router *gin.RouterGroup) {
 	})
 }
 
-type ChatReq struct {
+type
+
+type chatReq struct {
 	Msg       string `json:"msg"`
 	Anonymous bool   `json:"anonymous"`
 }
