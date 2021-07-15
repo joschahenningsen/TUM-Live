@@ -12,6 +12,7 @@ import (
 	"time"
 )
 
+
 func NotifyWorkers() {
 	log.Println("getting streams for workers")
 	streams := dao.GetDueStreamsFromLectureHalls()

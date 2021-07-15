@@ -19,20 +19,20 @@
   "homepage": "https://github.com/joschahenningsen/TUM-Live#readme",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
-    "@fullcalendar/icalendar": "^5.7.0",
-    "chart.js": "^3.3.2",
+    "@fullcalendar/icalendar": "^5.8.0",
+    "chart.js": "^3.4.0",
     "flatpickr": "^4.6.9",
-    "fullcalendar": "^5.7.0",
-    "hls.js": "^1.0.4",
+    "fullcalendar": "^5.8.0",
+    "hls.js": "^1.0.7",
     "ical.js": "^1.4.0",
-    "nouislider": "^15.1.1",
-    "video.js": "^7.12.3",
-    "videojs-seek-buttons": "^2.0.0"
+    "nouislider": "^15.2.0",
+    "video.js": "^7.13.3",
+    "videojs-seek-buttons": "^2.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.6",
-    "postcss": "^8.2.9",
-    "tailwindcss": "^2.2.0",
-    "typescript": "^4.3.2"
+    "postcss": "^8.3.5",
+    "tailwindcss": "^2.2.4",
+    "typescript": "^4.3.5"
   }
 }

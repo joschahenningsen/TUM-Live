@@ -18,14 +18,15 @@ import (
 	"time"
 )
 
+//deprecated
 func configGinWorkerRouter(r *gin.Engine) {
-	workers := r.Group("/api/worker")
+	workers := r.Group("/api/api_grpc")
 	workers.Use(tools.Worker)
-	r.GET("/api/worker/getJobs/:workerID", getJob)
-	r.POST("/api/worker/putVOD/:workerID", putVod)
-	r.POST("/api/worker/ping/:workerID", ping)
-	r.POST("/api/worker/notifyLive/:workerID", notifyLive)
-	r.POST("/api/worker/notifyLiveEnd/:workerID/:streamID", notifyLiveEnd)
+	r.GET("/api/api_grpc/getJobs/:workerID", getJob)
+	r.POST("/api/api_grpc/putVOD/:workerID", putVod)
+	r.POST("/api/api_grpc/ping/:workerID", ping)
+	r.POST("/api/api_grpc/notifyLive/:workerID", notifyLive)
+	r.POST("/api/api_grpc/notifyLiveEnd/:workerID/:streamID", notifyLiveEnd)
 	workers.POST("/silenceResults/:workerID", silenceResults)
 }
 
@@ -33,7 +34,7 @@ type SilenceReq struct {
 	StreamID string          `json:"stream_id"`
 	Silences []model.Silence `json:"silences"`
 }
-
+//deprecated
 func silenceResults(c *gin.Context) {
 	var req SilenceReq
 	err := c.MustBindWith(&req, binding.JSON)
@@ -54,7 +55,7 @@ func silenceResults(c *gin.Context) {
 		}
 	}
 }
-
+//deprecated
 func ping(c *gin.Context) {
 	if worker, err := dao.GetWorkerByID(context.Background(), c.Param("workerID")); err == nil {
 		body, err := ioutil.ReadAll(c.Request.Body)
@@ -76,12 +77,13 @@ func ping(c *gin.Context) {
 		dao.SaveWorker(worker)
 	}
 }
-
+//deprecated
 type pingReq struct {
 	Workload int    `json:"workload,omitempty"`
 	Status   string `json:"status,omitempty"`
 }
 
+//deprecated
 func notifyLiveEnd(c *gin.Context) {
 	_, err := dao.GetWorkerByID(context.Background(), c.Param("workerID"))
 	if err != nil {
@@ -95,7 +97,7 @@ func notifyLiveEnd(c *gin.Context) {
 			sentry.CaptureException(err)
 			return
 		}
-		notifyViewersLiveEnd(sid)
+		NotifyViewersLiveEnd(sid)
 
 		return
 
@@ -104,7 +106,7 @@ func notifyLiveEnd(c *gin.Context) {
 	return
 
 }
-
+//deprecated
 func notifyLive(c *gin.Context) {
 	_, err := dao.GetWorkerByID(context.Background(), c.Param("workerID"))
 	if err != nil {
@@ -138,20 +140,22 @@ func notifyLive(c *gin.Context) {
 		stream.PlaylistUrlCAM = req.URL
 	}
 	err = dao.SaveStream(&stream)
-	if !alreadyLive{
-		notifyViewersLiveStart(stream.ID)
+	if !alreadyLive {
+		notifyViewersLiveStart(stream.ID) // todo, move me
 	}
 	if err != nil {
 		sentry.CaptureException(err)
 	}
 }
 
+//deprecated
 type notifyLiveRequest struct {
 	StreamID string `json:"streamID"`
 	URL      string `json:"url"`     // eg. https://live.lrz.de/livetum/stream/playlist.m3u8
 	Version  string `json:"version"` //eg. COMB
 }
 
+//deprecated
 func putVod(c *gin.Context) {
 	_, err := dao.GetWorkerByID(context.Background(), c.Param("workerID"))
 	if err != nil {
@@ -185,6 +189,7 @@ func putVod(c *gin.Context) {
 	_ = dao.SaveStream(&stream)
 }
 
+//deprecated
 func getJob(c *gin.Context) {
 	_, err := dao.GetWorkerByID(context.Background(), c.Param("workerID"))
 	if err != nil {
@@ -208,6 +213,7 @@ func getJob(c *gin.Context) {
 	})
 }
 
+//deprecated
 type jobData struct {
 	Id          uint      `json:"id"`
 	Name        string    `json:"name"`
@@ -217,6 +223,7 @@ type jobData struct {
 	Upload      bool
 }
 
+//deprecated
 type putVodData struct {
 	HlsUrl   string
 	Version  string

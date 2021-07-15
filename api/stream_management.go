@@ -2,7 +2,6 @@ package api
 
 import (
 	"TUM-Live/dao"
-	"TUM-Live/model"
 	"TUM-Live/tools"
 	"context"
 	"errors"
@@ -45,17 +44,17 @@ func getStream(c *gin.Context) {
 			"vod":         stream.Recording})
 }
 
+//deprecated
 func configGinStreamAuthRouter(router gin.IRoutes) {
 	router.POST("/stream-management/on_publish", StartStream)
 	router.POST("/stream-management/on_publish_done", EndStream)
-	router.POST("/stream-management/on_record_done", OnRecordingFinished)
 }
 
-/*StartStream
-* This function is called when a user attempts to push a stream to the server.
-* @w: response writer. Status code determines wether streaming is approved: 200 if yes, 402 otherwise.
-* @r: request. Form if valid: POST /on_publish/app/kurs-key example: {/on_publish/eidi-3zt45z452h4754nj2q74}
- */
+//StartStream
+// This function is called when a user attempts to push a stream to the server.
+// w response writer. Status code determines wether streaming is approved: 200 if yes, 402 otherwise.
+// r request. Form if valid: POST /on_publish/app/kurs-key example: {/on_publish/eidi-3zt45z452h4754nj2q74}
+// deprecated
 func StartStream(c *gin.Context) {
 	_ = c.Request.ParseForm()
 	slug := c.Request.FormValue("name")
@@ -83,26 +82,9 @@ func StartStream(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
+//deprecated
 func EndStream(c *gin.Context) {
 	_ = c.Request.ParseForm()
 	key := strings.Split(c.Request.FormValue("tcurl"), "?secret=")[1] // this could be nicer.
 	_ = dao.SetStreamNotLive(context.Background(), key)
-}
-
-func OnRecordingFinished(c *gin.Context) {
-	_ = c.Request.ParseForm()
-	key := strings.Split(c.Request.FormValue("tcurl"), "?secret=")[1] // this could be nicer.
-	filepath := c.Request.FormValue("path")
-	_ = dao.SetStreamNotLive(context.Background(), key)
-	stream, err := dao.GetStreamByKey(context.Background(), key)
-	if err != nil {
-		log.Printf("invalid end stream request. Weird %v\n", err)
-		return
-	}
-	var convertJob = model.ProcessingJob{
-		FilePath:    filepath,
-		StreamID:    stream.ID,
-		AvailableAt: time.Now().Add(time.Hour * 2),
-	}
-	dao.InsertConvertJob(context.Background(), &convertJob)
 }

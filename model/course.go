@@ -14,6 +14,7 @@ type Course struct {
 	Year                int    // eg. 2021
 	TeachingTerm        string //eg. Summer/Winter
 	TUMOnlineIdentifier string
+	LiveEnabled         bool `gorm:"default:true"`
 	VODEnabled          bool
 	DownloadsEnabled    bool
 	ChatEnabled         bool
